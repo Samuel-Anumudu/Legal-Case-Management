@@ -2,13 +2,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { auth } from "../firebase/config";
+import { auth } from "@/app/firebase/config";
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 
-export const Nav = () => {
+function LawyerDashboardNav() {
   const router = useRouter();
-  const pathname = usePathname();
   const [isAuthUser, setIsAuthUser] = useState(false);
 
   useEffect(() => {
@@ -28,7 +27,7 @@ export const Nav = () => {
 
   return (
     <nav>
-      <div className="navbar bg-base-100 p-0">
+      <div className="navbar  bg-white p-0">
         <div className="flex-1">
           <h1 className="text-3xl font-extrabold">
             L<span className="text-[#fd5a1d]">i</span>gu
@@ -36,17 +35,24 @@ export const Nav = () => {
         </div>
 
         <div className="flex-none gap-2">
-          {!isAuthUser && (
-            <div>
-              <ul>
-                <li>
-                  <Link href="/auth/login">Log in</Link>
-                </li>
-              </ul>
-            </div>
-          )}
+          <div>
+            <ul className="flex items-center gap-8">
+              <li>
+                <Link href="/dashboard/lawyer-dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <Link href="/dashboard/lawyer-dashboard/cases">Cases</Link>
+              </li>
+              <li>
+                <Link href="/dashboard/lawyer-dashboard/clients">Clients</Link>
+              </li>
+              <li>
+                <Link href="/dashboard/lawyer-dashboard/lawyers">Lawyers</Link>
+              </li>
+            </ul>
+          </div>
           {isAuthUser && (
-            <div className="dropdown dropdown-end">
+            <div className="dropdown dropdown-end ml-4 ">
               <div
                 tabIndex={0}
                 role="button"
@@ -61,7 +67,7 @@ export const Nav = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
+                className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box  bg-white p-2 shadow"
               >
                 <li>
                   <a className="justify-between">Profile</a>
@@ -79,4 +85,6 @@ export const Nav = () => {
       </div>
     </nav>
   );
-};
+}
+
+export default LawyerDashboardNav;
