@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import dayjs from "dayjs";
-import moment from "moment";
+
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -29,9 +29,7 @@ const initialCaseData: Record<string, FormValues> = {
 function AddNewCasePage() {
   const [caseData, setCaseData] =
     useState<Record<string, FormValues>>(initialCaseData);
-
-  const date = moment();
-  var currentDate = date.format("DD-MM-YYYY");
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(dayjs());
 
   const CASE_TYPE = [
     "Civil",
@@ -59,6 +57,19 @@ function AddNewCasePage() {
     "Haley Talor",
   ];
 
+  useEffect(() => {
+    const today = dayjs();
+    setCaseData((prevState) => {
+      return {
+        ...prevState,
+        dateOpened: {
+          text: today.format("DD/MM/YYYY"),
+          isError: false,
+        },
+      };
+    });
+  }, []);
+
   const onChangeHandler = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -76,6 +87,7 @@ function AddNewCasePage() {
   };
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
+    setSelectedDate(date);
     if (date) {
       setCaseData((prevCaseData) => ({
         ...prevCaseData,
@@ -236,9 +248,9 @@ function AddNewCasePage() {
                     >
                       <DemoItem>
                         <DesktopDatePicker
-                          onChange={handleDateChange}
                           name="dateOpened"
-                          defaultValue={dayjs("2024-01-01")}
+                          value={selectedDate}
+                          onChange={handleDateChange}
                           format="DD/MM/YYYY"
                         />
                       </DemoItem>
